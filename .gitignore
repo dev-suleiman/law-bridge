@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js
+.next/
+out/
+
+# Environment files — NEVER commit these
+.env
+.env.local
+.env.*.local
+.env.production
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+.Python
+ml-service/__pycache__/
+ml-service/*.pyc
+training/__pycache__/
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Model weights — too large for git, use Supabase Storage
+model/
+training/data/
+training/source_docs/
+ml-service/corpus/
+
+# Misc
+.DS_Store
+*.log
+.vercel
+.turbo
+coverage/
+.nyc_output/

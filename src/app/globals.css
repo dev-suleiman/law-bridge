@@ -1,0 +1,145 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 150 30% 8%;
+    --card: 0 0% 100%;
+    --card-foreground: 150 30% 8%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 150 30% 8%;
+    --primary: 154 100% 21%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 150 20% 96%;
+    --secondary-foreground: 150 30% 8%;
+    --muted: 150 15% 94%;
+    --muted-foreground: 150 15% 45%;
+    --accent: 48 97% 55%;
+    --accent-foreground: 150 30% 8%;
+    --destructive: 349 84% 44%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 150 20% 88%;
+    --input: 150 20% 88%;
+    --ring: 154 100% 21%;
+    --radius: 0.625rem;
+  }
+
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-surface text-text-primary;
+    font-family: var(--font-body), system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100dvh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display), Georgia, serif;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  /* Minimum tap target size for mobile */
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Focus styles for accessibility */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+}
+
+@layer components {
+  /* Ghana flag accent stripe */
+  .ghana-stripe {
+    background: linear-gradient(
+      to right,
+      theme('colors.brand.red') 0%,
+      theme('colors.brand.red') 33.33%,
+      theme('colors.brand.gold') 33.33%,
+      theme('colors.brand.gold') 66.66%,
+      theme('colors.brand.green') 66.66%,
+      theme('colors.brand.green') 100%
+    );
+  }
+
+  .ghana-stripe-v {
+    background: linear-gradient(
+      to bottom,
+      theme('colors.brand.red') 0%,
+      theme('colors.brand.red') 33.33%,
+      theme('colors.brand.gold') 33.33%,
+      theme('colors.brand.gold') 66.66%,
+      theme('colors.brand.green') 66.66%,
+      theme('colors.brand.green') 100%
+    );
+  }
+
+  /* Shimmer loading skeleton */
+  .skeleton {
+    @apply rounded-md bg-muted;
+    background: linear-gradient(
+      90deg,
+      theme('colors.surface.tertiary') 25%,
+      theme('colors.surface.secondary') 50%,
+      theme('colors.surface.tertiary') 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  /* Streaming text cursor */
+  .streaming-cursor::after {
+    content: '▋';
+    @apply text-primary animate-pulse-soft ml-0.5;
+    font-size: 0.85em;
+  }
+
+  /* Legal disclaimer banner */
+  .disclaimer-banner {
+    @apply border-l-4 border-brand-gold bg-amber-50 p-4 rounded-r-lg;
+  }
+
+  /* Card with hover */
+  .card-hover {
+    @apply transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5;
+  }
+
+  /* Gradient hero overlay */
+  .hero-overlay {
+    background: linear-gradient(
+      135deg,
+      rgba(0, 107, 63, 0.88) 0%,
+      rgba(0, 77, 45, 0.75) 50%,
+      rgba(0, 30, 15, 0.65) 100%
+    );
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Safe area padding for mobile */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+}

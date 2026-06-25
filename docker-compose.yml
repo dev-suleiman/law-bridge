@@ -1,0 +1,64 @@
+version: "3.9"
+
+# ============================================================
+# LawBridge GH — Local Development Stack
+# Usage: docker-compose up --build
+#
+# Services started:
+#   nextjs    → http://localhost:3000  (Next.js web app)
+#   ml        → http://localhost:8000  (Python ML microservice)
+#
+# NOTE: Supabase, Pinecone, Paystack, etc. are cloud services.
+# Copy .env.example → .env.local and add your API keys before starting.
+# ============================================================
+
+services:
+    # ── Next.js Web Application ──────────────────────────────
+    nextjs:
+        build:
+            context: .
+            dockerfile: Dockerfile.nextjs
+        ports:
+            - "3000:3000"
+        environment:
+            - NODE_ENV=development
+            - ML_SERVICE_URL=http://ml:8000
+        env_file:
+            - .env.local
+        volumes:
+            - .:/app
+            - /app/node_modules
+            - /app/.next
+        depends_on:
+            ml:
+                condition: service_healthy
+        restart: unless-stopped
+
+    # ── Python ML Microservice ────────────────────────────────
+    ml:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "8000:8000"
+        env_file:
+            - .env.local
+        environment:
+            - MODEL_MODE=stub
+            - ENV=development
+        volumes:
+            # Persist FAISS index and corpus across restarts
+            - ml_corpus:/app/ml-service/corpus
+            # Mount source for hot-reload in dev
+            - ./ml-service:/app/ml-service
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+            interval: 30s
+            timeout: 10s
+            retries: 5
+            start_period: 60s
+        restart: unless-stopped
+
+volumes:
+    ml_corpus:
+        driver: local
