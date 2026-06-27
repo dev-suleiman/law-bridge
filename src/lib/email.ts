@@ -1,7 +1,19 @@
-import { Resend } from 'resend'
+import type { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-const FROM = process.env.RESEND_FROM_EMAIL || 'noreply@lawbridge.gh'
+function getFromEmail() {
+  return process.env.RESEND_FROM_EMAIL || 'noreply@lawbridge.gh'
+}
+
+async function createResendClient(): Promise<Resend | null> {
+  const apiKey = process.env.RESEND_API_KEY
+  if (!apiKey) {
+    console.warn('[email] RESEND_API_KEY is not configured; skipping send')
+    return null
+  }
+
+  const { Resend } = await import('resend')
+  return new Resend(apiKey)
+}
 
 export async function sendBookingConfirmation(params: {
   toEmail: string
@@ -11,6 +23,10 @@ export async function sendBookingConfirmation(params: {
   meetingLink: string
   feeGhs: number
 }) {
+  const resend = await createResendClient()
+  if (!resend) return
+
+  const from = getFromEmail()
   const dateStr = params.scheduledAt.toLocaleString('en-GH', {
     dateStyle: 'full',
     timeStyle: 'short',
@@ -18,7 +34,7 @@ export async function sendBookingConfirmation(params: {
   })
 
   await resend.emails.send({
-    from: `LawBridge GH <${FROM}>`,
+    from: `LawBridge GH <${from}>`,
     to: params.toEmail,
     subject: `Booking Confirmed — ${params.lawyerName}`,
     html: `
@@ -52,6 +68,10 @@ export async function sendLawyerVerificationResult(params: {
   approved: boolean
   rejectionReason?: string
 }) {
+  const resend = await createResendClient()
+  if (!resend) return
+
+  const from = getFromEmail()
   const subject = params.approved
     ? 'Your LawBridge GH Profile is Approved!'
     : 'LawBridge GH — Application Update'
@@ -61,7 +81,7 @@ export async function sendLawyerVerificationResult(params: {
     : `<p>Dear ${params.lawyerName},</p><p>After review, we were unable to verify your application at this time.</p>${params.rejectionReason ? `<p><strong>Reason:</strong> ${params.rejectionReason}</p>` : ''}<p>Please contact support@lawbridge.gh if you have questions.</p>`
 
   await resend.emails.send({
-    from: `LawBridge GH <${FROM}>`,
+    from: `LawBridge GH <${from}>`,
     to: params.toEmail,
     subject,
     html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">${body}</div>`,
@@ -69,8 +89,13 @@ export async function sendLawyerVerificationResult(params: {
 }
 
 export async function sendWelcomeEmail(params: { toEmail: string; name: string }) {
+  const resend = await createResendClient()
+  if (!resend) return
+
+  const from = getFromEmail()
+
   await resend.emails.send({
-    from: `LawBridge GH <${FROM}>`,
+    from: `LawBridge GH <${from}>`,
     to: params.toEmail,
     subject: 'Welcome to LawBridge GH — Know Your Rights',
     html: `
