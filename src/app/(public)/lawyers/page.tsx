@@ -14,6 +14,8 @@ export const metadata: Metadata = {
   description: 'Connect with verified Ghanaian lawyers for paid consultations.',
 }
 
+export const dynamic = 'force-dynamic'
+
 export default async function LawyersPage() {
   const user = await getServerUser()
   let profile = null
