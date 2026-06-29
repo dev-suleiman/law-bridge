@@ -5,7 +5,6 @@ MODEL_MODE=stub  → Uses Anthropic Claude API (fast, no GPU needed)
 MODEL_MODE=mistral → Uses fine-tuned Mistral 7B + LoRA adapter (requires GPU/high RAM)
 """
 
-import os
 import time
 import logging
 from contextlib import asynccontextmanager

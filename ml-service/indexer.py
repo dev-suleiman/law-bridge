@@ -6,12 +6,10 @@ generates embeddings, and upserts into Pinecone (or FAISS on disk).
 Called by the FastAPI /corpus/index endpoint when admin triggers re-indexing.
 """
 
-import os
 import json
 import logging
 import asyncio
 import hashlib
-import tempfile
 from pathlib import Path
 from typing import Optional
 from dataclasses import dataclass

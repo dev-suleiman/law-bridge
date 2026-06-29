@@ -6,7 +6,7 @@ Two-stage retrieval pipeline:
 
 import logging
 import asyncio
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Optional
 
 import numpy as np
@@ -87,7 +87,8 @@ async def initialize_retrieval():
 async def _load_faiss():
     """Load FAISS index from disk if it exists."""
     global _faiss_index, _faiss_metadata
-    import os, json
+    import os
+    import json
 
     faiss_path = os.path.join(os.path.dirname(__file__), "corpus", "index.faiss")
     meta_path = os.path.join(os.path.dirname(__file__), "corpus", "metadata.json")
