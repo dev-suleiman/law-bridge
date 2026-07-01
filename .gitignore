@@ -40,3 +40,41 @@ ml-service/corpus/
 .turbo
 coverage/
 .nyc_output/
+
+
+# Local .terraform directories
+.terraform/
+
+# Terraform lock file (keep this if you want consistent provider versions across machines)
+# .terraform.lock.hcl
+
+# State files
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+
+# Plan files
+*.tfplan
+*.plan
+
+# Crash log
+crash.log
+crash.*.log
+
+# Override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Variables files that may contain secrets
+*.tfvars
+*.tfvars.json
+
+# Except example var files — safe to commit
+!example.tfvars
+!*.tfvars.example
+
+# CLI config
+.terraformrc
+terraform.rc
